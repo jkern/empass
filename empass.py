@@ -10,6 +10,7 @@ import sys
 import string
 import random
 from random import Random
+
 #Global Variables
 #All keys avalible from the right-hand
 righthand = '23456qwertasdfgzxcvbQWERTASDFGZXCVB&*()_+}{|":>?<-=[]\';,./'
@@ -25,7 +26,7 @@ def usage():
 	print "[phrase key (a word that is 4 letters shorter than the password length)]\n",
 	print "[alt (if you want the password to alternate hands)]\n"
 
-def sanityCheck():
+def mainloop():
 	rowrange = rowgen(phrase)
 	columnhead = alphagen()
 	password = passwdgen(passwordLength, alternate_hands)
@@ -47,12 +48,8 @@ def rowgen(phrase):
 	phraselen =len(phrase) - 1
 	negphraselen = phraselen * -1
 	rowrange = range(negphraselen, phraselen)
-	#rowrange.remove(0)
 	return rowrange
 
-#def format(rowrange, columnhead, random):
-	#row = random.sample(rowrange, 1)
-	
 def passwdgen(passwordLength, alternate_hands):
 	allchars = righthand + lefthand
 	rng = Random()
@@ -85,11 +82,10 @@ def phraseslice(phrase):
 	
 def jumblelines(passwordLength, rowrange, phraselist, phrase, password):
 	#The following is where you can determin how many rows will be inserted
-	#x will equal the ammount of rows and the offset of the rows
+	#x will equal the ammount of rows and the offset of the rows should default to 4 less than the length
 	#turn into a sys arg
 	x = 0
 	passwordLength = passwordLength - x 
-	#phraselen = len(phrase)
 	passloc = 0 + x
 	#Loop the print of the jumbles
 	while passwordLength > 0:
@@ -101,7 +97,6 @@ def jumblelines(passwordLength, rowrange, phraselist, phrase, password):
 		jumblerow = passwdgen(25, False)
 		if phraserow > 0:
 			jumblerow.insert( phraserow, password[passloc] )
-			#jumblerow.remove
 		else:
 			jumblerow.insert( phraserow * -1, password[passloc] )
 		#print password[x]
@@ -118,7 +113,7 @@ def jumblelines(passwordLength, rowrange, phraselist, phrase, password):
 try:	
 	passwordLength = int(sys.argv[1])
 except:
-	#user didn't specify a length.  that's ok, just use 8
+	#Default to password length of 8
 	passwordLength = 8
 try:
 	phrase = str(sys.argv[2])
@@ -132,4 +127,4 @@ except:
 	alternate_hands = False
 
 #runit!!!
-sanityCheck()
+mainloop()
