@@ -1,4 +1,11 @@
 #!/usr/bin/python
+"""
+Written by Joseph Kern, 
+empass is based on the Perdue CERIAS presentation by Umut Topkara, 
+"Passwords Decay, Words Endure: Towards Secure and Re-usable Multiple Password Mnemonics"
+EMPATHE: rEusable Mnemonics for Password AuTHEntication
+2007May15
+"""
 import sys
 import string
 import random
@@ -17,6 +24,7 @@ def usage():
 	print sys.argv[0],"\n", "[length of password-default to 8]\n",
 	print "[phrase key (a word that is 4 letters shorter than the password length)]\n",
 	print "[alt (if you want the password to alternate hands)]\n"
+
 def sanityCheck():
 	rowrange = rowgen(phrase)
 	columnhead = alphagen()
@@ -30,6 +38,7 @@ def sanityCheck():
 	print "\t",columnhead
 	#print "Phraselist:",phraselist,"\n"
 	jumblelines(passwordLength, rowrange, phraselist,phrase,password)
+
 def alphagen():
 	alphastr = string.join(alpha)
 	return alphastr
