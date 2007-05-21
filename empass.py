@@ -1,13 +1,33 @@
 #!/usr/bin/python
-"""
-Written by Joseph Kern, 
+"""empass - Reusable Mnemonic Passwords
+
+Usage: python empass.py [options]
+
+Options:
+  -l ..., --length= ...   length of random password (defaults to 8)
+  -p ..., --phrase= ...   mnemonic phrase (Should be easily memorizable, but NOT easily guessable)
+  -a, --alt               if chosen will alternate hands during password generation
+  -h, --help              displays this help
+
+Examples:
+  empass.py -p phrase             generates an 8 character password and table based on phrase
+  empass.py -p phrase -l 16       generates a 16 character random password and table based on phrase
+  empass.py -p phrase -l 16 -a    generates same as above
+  empass.py -h                    displays this help
+
 empass is based on the Perdue CERIAS presentation by Umut Topkara, 
 "Passwords Decay, Words Endure: Towards Secure and Re-usable Multiple Password Mnemonics"
-EMPATHE: rEusable Mnemonics for Password AuTHEntication
-2007May15
-"""
+EMPATHE: rEusable Mnemonics for Password AuTHEntication"""
+
+__author__ = "Joseph Kern (joseph.a.kern@gmail.com)"
+__version__ = "$Revision: 1.5 $"
+__date__ = "$Date: 2007/05/21 23:26:06 $"
+__copyright__ = "Copyright (c) 2007 Joseph Kern"
+__license__ = "BSD"
+
 import sys
 import string
+import getopt
 import random
 from random import Random
 
@@ -21,24 +41,7 @@ alpha = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r"
 alphadict = {'a':'1','b':'2','c':'3','d':'4','e':'5','f':'6','g':'7','h':'8','i':'9','j':'10','k':'11','l':'12','m':'13','n':'14','o':'15','p':'16','q':'17','r':'18','s':'19','t':'20','u':'21','v':'22','w':'23','x':'24','y':'25','z':'26'}
 
 def usage():
-	print "USAGE:"
-	print sys.argv[0],"\n", "[length of password-default to 8]\n",
-	print "[phrase key (a word that is 4 letters shorter than the password length)]\n",
-	print "[alt (if you want the password to alternate hands)]\n"
-
-def mainloop():
-	rowrange = rowgen(phrase)
-	columnhead = alphagen()
-	password = passwdgen(passwordLength, alternate_hands)
-	phraselist = phraseslice(phrase)
-	passwordstr = string.join(password)
-	
-	print "Phrase:",phrase
-	print "Password",passwordstr,"\n\n\n\n"
-	#print "Rowrange:",rowrange
-	print "\t",columnhead
-	#print "Phraselist:",phraselist,"\n"
-	jumblelines(passwordLength, rowrange, phraselist,phrase,password)
+    print __doc__
 
 def alphagen():
 	alphastr = string.join(alpha)
@@ -109,22 +112,41 @@ def jumblelines(passwordLength, rowrange, phraselist, phrase, password):
 		print row.zfill(2),"\t",jumblerowstr
 		passwordLength = passwordLength - 1
 		passloc = passloc + 1
-	
-try:	
-	passwordLength = int(sys.argv[1])
-except:
-	#Default to password length of 8
-	passwordLength = 8
-try:
-	phrase = str(sys.argv[2])
-except:
-	usage()
-try:
-	alternate_hands = sys.argv[3] == 'alt'
-	if not alternate_hands:
-		usage()
-except:
-	alternate_hands = False
 
-#runit!!!
-mainloop()
+def main(argv):
+	passwordLength = 8
+	alternate_hands = False
+	try:
+		opts, args = getopt.getopt(argv, "hjl:p:a", ["help", "justpass","length=", "phrase=", "alt"])
+	except getopt.GetoptError:
+		usage()
+		sys.exit(2)
+	for opt, arg in opts:
+		if opt in ("-h", "--help"):
+			usage()
+			sys.exit()
+		elif opt in ("-j", "--justpass"):
+			password_only = True
+		elif opt in ("-l", "--length="):
+			passwordLength = int(arg)
+		elif opt in ("-p", "--phrase="):
+			phrase = arg
+		elif opt in ("-a", "--alt"):
+			alternate_hands = True
+	"""
+	if len(args) > 1:
+			usage()
+			sys.exit()
+	"""
+	rowrange = rowgen(phrase)
+	password = passwdgen(passwordLength, alternate_hands)
+	phraselist = phraseslice(phrase)
+
+	print "Phrase:",phrase
+	print "Password", string.join(password),"\n\n\n\n"
+	print "\t",alphagen()
+	jumblelines(passwordLength,rowrange,phraselist,phrase,password)
+
+#Run the program
+if __name__ == "__main__":
+	main(sys.argv[1:])
