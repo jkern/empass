@@ -6,13 +6,14 @@ Usage: python empass.py [options]
 Options:
   -l ..., --length= ...   length of random password (defaults to 8)
   -p ..., --phrase= ...   mnemonic phrase (Should be easily memorizable, but NOT easily guessable)
+  -r ..., --row-id= ...   Row id displayes the number of rows, this directly affects how 'secure' the card is to observation
   -a, --alt               if chosen will alternate hands during password generation
   -h, --help              displays this help
 
 Examples:
   empass.py -p phrase             generates an 8 character password and table based on phrase
   empass.py -p phrase -l 16       generates a 16 character random password and table based on phrase
-  empass.py -p phrase -l 16 -a    generates same as above
+  empass.py -p phrase -l 16 -a    generates same as above but alternates hands
   empass.py -h                    displays this help
 
 empass is based on the Perdue CERIAS presentation by Umut Topkara, 
@@ -20,8 +21,8 @@ empass is based on the Perdue CERIAS presentation by Umut Topkara,
 EMPATHE: rEusable Mnemonics for Password AuTHEntication"""
 
 __author__ = "Joseph Kern (joseph.a.kern@gmail.com)"
-__version__ = "$Revision: 1.6 $"
-__date__ = "$Date: 2007/11/15 01:49:58 $"
+__version__ = "$Revision: 1.7 $"
+__date__ = "$Date: 2007/11/15 23:33:27 $"
 __copyright__ = "Copyright (c) 2007 Joseph Kern"
 __license__ = "BSD"
 """
@@ -102,13 +103,12 @@ def phraseslice(phrase):
   phrasestop = phrasestop + 1
  return phraselist
  
-def jumblelines(passwordLength, rowrange, phraselist, phrase, password):
+def jumblelines(passwordLength, rowrange, phraselist, phrase, password, xrowid):
  #The following is where you can determin how many rows will be inserted
- #x will equal the ammount of rows and the offset of the rows should default to 4 less than the length
+ #xrowid will equal the ammount of rows and the offset of the rows should default to 4 less than the length
  #turn into a sys arg
- x = 0
- passwordLength = passwordLength - x 
- passloc = 0 + x
+ passwordLength = passwordLength - xrowid 
+ passloc = 0 + xrowid
  #Loop the print of the jumbles
  while passwordLength > 0:
   row = random.sample(rowrange, 1)
@@ -127,19 +127,28 @@ def jumblelines(passwordLength, rowrange, phraselist, phrase, password):
    row = str(row)
   else:
    row = str(row)
+  #Join the rows here
   jumblerowstr = string.join(jumblerow)
+  #jumblerowstr = string.join(jumblerow)
+  #Print the rows out here, need to implement html formatting here
+  #Zfill is used to help the formatting of the rowheader 'row'
+  #
   print row.zfill(2),"\t",jumblerowstr
+  #Decriment the loop, identified by the length of the password
   passwordLength = passwordLength - 1
+  #Increment the location in the password
   passloc = passloc + 1
 
 def main(argv):
 
  try:
-  opts, args = getopt.getopt(argv, "hjl:p:a", ["help", "justpass","length=", "phrase=", "alt"])
+  opts, args = getopt.getopt(argv, "hjl:p:r:a", ["help", "justpass", "length=", "phrase=", "row-id=", "alt"])
  except getopt.GetoptError:
   usage()
   sys.exit(2)
  passwordLength = 8
+ #No value to xrowid give the default value of 4 characters showing, the rest are in the jumble
+ xrowid = 0
  alternate_hands = False
  phrase = '1pyerror'
  for opt, arg in opts:
@@ -156,6 +165,9 @@ def main(argv):
                         #Keyphrase
   elif opt in ("-p", "--phrase="):
    phrase = arg
+                        #Row id displayes the number of rows, this directly affects how 'secure' the card is to observation
+  elif opt in ("-r", "--row-id"):
+   xrowid = int(arg)
                         #Alternate hands for password
   elif opt in ("-a", "--alt"):
    alternate_hands = True
@@ -164,7 +176,7 @@ def main(argv):
    usage()
    sys.exit()
  """
- if phrase == '1pyerror':
+ if phrase == '1pyerror' or xrowid >= passwordLength:
     usage()
     sys.exit(2)
  else: 
@@ -175,7 +187,7 @@ def main(argv):
  print "Phrase:",phrase
  print "Password", string.join(password),"\n\n\n\n"
  print "\t",alphagen()
- jumblelines(passwordLength,rowrange,phraselist,phrase,password)
+ jumblelines(passwordLength,rowrange,phraselist,phrase,password, xrowid)
 
 #Run the program
 if __name__ == "__main__":
