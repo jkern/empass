@@ -23,19 +23,27 @@ EMPATHE: rEusable Mnemonics for Password AuTHEntication"""
 __author__ = "Joseph Kern (joseph.a.kern@gmail.com)"
 __version__ = "$Revision: 1.7 $"
 __date__ = "$Date: 2007/11/15 23:33:27 $"
-__copyright__ = "Copyright (c) 2007 Joseph Kern"
-__license__ = "BSD"
+__license__ = "GPLv2"
 """
 ************************************************
-Notes
+TODO
+
+CLEAN UP THIS CODE!
+    Make some classes for god's sake
+    PEP 8 PEP 8 PEP 8 PEP 8 PEP 8
+
+Split up some of these gigantic functions
+
+There are so many better ways to generate the alphabet and number tables
+
+Move the user interface away from the actual code
+
 I want to add an RSS parser to find random mnemonic
 words from a news feed
 
 Need to convert phrase upper to all lowercase
 
 Variable combining; alpha and alphadict
-
-Code cleanup
 
 Is there a better random lib?
 
