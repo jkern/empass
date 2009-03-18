@@ -1,46 +1,32 @@
-#!/usr/bin/python
 """empass - Reusable Mnemonic Passwords
-
 Usage: python empass.py [options]
-
 Options:
   -l ..., --length= ...   length of random password (defaults to 8)
   -p ..., --phrase= ...   mnemonic phrase (Should be easily memorizable, but NOT easily guessable)
   -r ..., --row-id= ...   Row id displayes the number of rows, this directly affects how 'secure' the card is to observation
   -a, --alt               if chosen will alternate hands during password generation
   -h, --help              displays this help
-
 Examples:
   empass.py -p phrase             generates an 8 character password and table based on phrase
   empass.py -p phrase -l 16       generates a 16 character random password and table based on phrase
   empass.py -p phrase -l 16 -a    generates same as above but alternates hands
   empass.py -h                    displays this help
-
 __author__ = "Joseph Kern (joseph.a.kern@gmail.com)"
 __license__ = "GPLv2"
 """
 ************************************************
 TODO
-
 CLEAN UP THIS CODE!
     Make some classes for god's sake
     PEP 8 PEP 8 PEP 8 PEP 8 PEP 8
-
 Split up some of these gigantic functions
-
 There are so many better ways to generate the alphabet and number tables
-
 Move the user interface away from the actual code
-
 I want to add an RSS parser to find random mnemonic
 words from a news feed
-
 Need to convert phrase upper to all lowercase
-
 Variable combining; alpha and alphadict
-
 Is there a better random lib?
-
 Network interface . . .
 ************************************************
 """
@@ -49,37 +35,24 @@ import string
 import getopt
 import random
 from random import Random
-
-#Global Variables
-#All keys avalible from the right-hand
-#excluded characters iI1|`~"'{}
 righthand = 'plokmjnuhbyPLOKMJNUHBY67890^&*()_+-=[]\;:<>/?,.'
-#All keys avalible from the left hand
 lefthand = 'qazwsxedcrfvtgbQAZWSXEDCRFVTGB2345!@#$%'
-#The alphabet
 alpha = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
 alphadict = {'a':'1','b':'2','c':'3','d':'4','e':'5','f':'6','g':'7','h':'8','i':'9','j':'10','k':'11','l':'12','m':'13','n':'14','o':'15','p':'16','q':'17','r':'18','s':'19','t':'20','u':'21','v':'22','w':'23','x':'24','y':'25','z':'26'}
-
 def usage():
     print __doc__
-
 def alphagen():
  alphastr = string.join(alpha)
  return alphastr
-
 def rowgen(phrase): 
-#This is subtracted for the user to more easily id the row for the password
  phraselen =len(phrase) - 1
  negphraselen = phraselen * -1
  rowrange = range(negphraselen, phraselen)
  return rowrange
-
-#Do you wish to alternate your hands?
 def passwdgen(passwordLength, alternate_hands):
  allchars = righthand + lefthand
  rng = Random()
  randpass = [ ]
- 
  for i in range(passwordLength):
   if not alternate_hands:
    randpass.append( rng.choice(allchars) )
@@ -94,7 +67,6 @@ def passwdgen(passwordLength, alternate_hands):
  #return password
  #Retrun as a list, this is the best way because the inserting of the password chars into the jumble use the list replace method
  return randpass
- 
 def phraseslice(phrase):
  phraselen = len(phrase)
  phrasestop = 0
@@ -104,7 +76,6 @@ def phraseslice(phrase):
   phraselist.append( alphadict[phrase[phrasestop]] )
   phrasestop = phrasestop + 1
  return phraselist
- 
 def jumblelines(passwordLength, rowrange, phraselist, phrase, password, xrowid):
  #The following is where you can determin how many rows will be inserted
  #xrowid will equal the ammount of rows and the offset of the rows should default to 4 less than the length
@@ -140,9 +111,7 @@ def jumblelines(passwordLength, rowrange, phraselist, phrase, password, xrowid):
   passwordLength = passwordLength - 1
   #Increment the location in the password
   passloc = passloc + 1
-
 def main(argv):
-
  try:
   opts, args = getopt.getopt(argv, "hjl:p:r:a", ["help", "justpass", "length=", "phrase=", "row-id=", "alt"])
  except getopt.GetoptError:
@@ -185,12 +154,9 @@ def main(argv):
   rowrange = rowgen(phrase)
   password = passwdgen(passwordLength, alternate_hands)
   phraselist = phraseslice(phrase)
-
  print "Phrase:",phrase
  print "Password", string.join(password),"\n\n\n\n"
  print "\t",alphagen()
  jumblelines(passwordLength,rowrange,phraselist,phrase,password, xrowid)
-
-#Run the program
 if __name__ == "__main__":
  main(sys.argv[1:])
