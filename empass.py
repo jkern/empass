@@ -16,13 +16,7 @@ Examples:
   empass.py -p phrase -l 16 -a    generates same as above but alternates hands
   empass.py -h                    displays this help
 
-empass is based on the Perdue CERIAS presentation by Umut Topkara, 
-"Passwords Decay, Words Endure: Towards Secure and Re-usable Multiple Password Mnemonics"
-EMPATHE: rEusable Mnemonics for Password AuTHEntication"""
-
 __author__ = "Joseph Kern (joseph.a.kern@gmail.com)"
-__version__ = "$Revision: 1.7 $"
-__date__ = "$Date: 2007/11/15 23:33:27 $"
 __license__ = "GPLv2"
 """
 ************************************************
