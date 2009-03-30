@@ -14,22 +14,22 @@ Examples:
 __author__ = "Joseph Kern (joseph.a.kern@gmail.com)"
 __license__ = "GPLv2"
 """
-************************************************
-TODO
-CLEAN UP THIS CODE!
-    Make some classes for god's sake
-    PEP 8 PEP 8 PEP 8 PEP 8 PEP 8
-Split up some of these gigantic functions
-There are so many better ways to generate the alphabet and number tables
-Move the user interface away from the actual code
-I want to add an RSS parser to find random mnemonic
-words from a news feed
-Need to convert phrase upper to all lowercase
-Variable combining; alpha and alphadict
-Is there a better random lib?
-Network interface . . .
-************************************************
-"""
+#************************************************
+#TODO
+#CLEAN UP THIS CODE!
+#    Make some classes for god's sake
+#    PEP 8 PEP 8 PEP 8 PEP 8 PEP 8
+#Split up some of these gigantic functions
+#There are so many better ways to generate the alphabet and number tables
+#Move the user interface away from the actual code
+#I want to add an RSS parser to find random mnemonic
+#words from a news feed
+#Need to convert phrase upper to all lowercase
+#Variable combining; alpha and alphadict
+#Is there a better random lib?
+#Network interface . . .
+#************************************************
+
 import sys
 import string
 import getopt
